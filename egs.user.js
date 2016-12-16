@@ -248,25 +248,30 @@ function EksiGS(){
         $('.content:contains("spoiler")').each(function() {
             var open = false;
             var result = $();
+            var firstSpoilerBkz;
             $(this).contents().each(function() {
                 if ($(this).is('a:contains("spoiler").b')) {
                     if (open) {
                         $(this).hide();
+                        firstSpoilerBkz.hide();
                         result.wrapAll('<div class="spoilerContainer" data-spoilertext="' + $(this).text() + '"></div>');
                         open = false;
+                        firstSpoilerBkz = null;
                     }
                     else {
-                        $(this).hide();
+                        firstSpoilerBkz = $(this);
                         result = $();
                         open = true;
                         $(this).parents(".content").css("max-height", "none");
                     }
                 }
                 else {
-                    if ($(this).text().indexOf('---') != -1 && open)
+                    if ($(this).text().indexOf('---') != -1 && open){
                         $(this).remove();
-                    else
+                    }
+                    else{
                         result = result.add($(this));
+                    }
                 }
             });
         });
