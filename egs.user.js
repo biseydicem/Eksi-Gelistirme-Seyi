@@ -300,6 +300,11 @@ function EksiGS(){
             $(this).remove();
         });
 
+        var today = new Date(), months = ["ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos", "eylül", "ekim", "kasım", "aralık"];
+        var bugunOlanlarKeywords = today.getDate() + " " + months[today.getMonth()] + " " + today.getFullYear();
+        var bugunOlanlarUrl = "/basliklar/ara?SearchForm.Keywords=" + bugunOlanlarKeywords + "&SearchForm.Author=&SearchForm.When.From=&SearchForm.When.To=&SearchForm.NiceOnly=false&SearchForm.FavoritedOnly=false&SearchForm.SortOrder=Date";
+        $('#quick-index-nav li a:contains("tarihte bugün")').parent().after('<li><a href="' + bugunOlanlarUrl + '">bugün olanlar</a></li>');
+
         //style for outsider subetha items
         GM_addStyle(".dropdown-menu .subetha-item-outside { padding: 0 5px; }" +
                     ".subetha-item-outside form { display: inline-block; }" +
