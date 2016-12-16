@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Ekşi Geliştirme Şeyi
 // @description    sanatsal dokunuşlarla ekşi sözlük'ü güzelleştirir
-// @version        2
+// @version        3
 // @author         biseydicem
 // @copyright      2016, bi sey dicem
 // @license        GPL v3 or later; http://www.gnu.org/licenses/gpl.html
