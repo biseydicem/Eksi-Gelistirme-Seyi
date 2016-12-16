@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Ekşi Geliştirme Şeyi
 // @description    sanatsal dokunuşlarla ekşi sözlük'ü güzelleştirir
-// @version        1
+// @version        2
 // @author         biseydicem
 // @copyright      2016, bi sey dicem
 // @license        GPL v3 or later; http://www.gnu.org/licenses/gpl.html
@@ -1283,6 +1283,8 @@ function EksiGS(){
                     '.entrygom-div a { font-weight: inherit !important; }' +
                     '.entrygom-div li:before { content: "" !important; }');
 
+        var messageFormInjected = 0;
+
         //look for each link
         $(selector).each(function(){
             //make it underlined
@@ -1309,7 +1311,11 @@ function EksiGS(){
                             entrygomDiv.append($(data).find("#entry-list")[0].outerHTML); //get entry with attributes
                             entrygomDiv.append($(data).find("#favorite-link-template")[0].outerHTML); //get entry menu helper elements
                             entrygomDiv.append($(data).find("#delete-self-form")[0].outerHTML); //get entry menu helper elements
-                            entrygomDiv.append($(data).find("#message-send-form")[0].outerHTML); //get entry menu helper elements
+
+                            if(messageFormInjected == 0){
+                                entrygomDiv.append($(data).find("#message-send-form")[0].outerHTML); //get entry menu helper elements
+                                messageFormInjected = 1;
+                            }
 
                             //make content realistic
                             ek$i.entryMenu.attach(entrygomDiv.find("#entry-list > li:not([data-menu-attached])"), entrygomDiv.find("#title").data("title"));
