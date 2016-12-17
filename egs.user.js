@@ -1283,7 +1283,7 @@ function EksiGS(){
 
     function inlineEntry(selector){
         //include style
-        GM_addStyle('.entrygom-div { display:block; border:solid 1px #888888; box-shadow: 5px 5px 5px #888888; margin-bottom: 7px; padding-left: 7px; padding-top: 7px; padding-bottom: 10px; padding-right: 7px; }' +
+        GM_addStyle('.entrygom-div { display:block; border:solid 1px #888888; box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.5); margin-bottom: 7px; padding-left: 7px; padding-top: 7px; padding-bottom: 10px; padding-right: 7px; }' +
                     '.entrygom-div #title { padding-left: 0px; padding-right: 0px; text-indent: 0; }' +
                     '.entrygom-div #entry-list { text-indent: 0; padding-left: 0px; padding-right: 0px; margin-top: 10px; margin-bottom: 0px; }' +
                     '.entrygom-div #entry-list footer .rate-options { display: inline-block !important; }' +
