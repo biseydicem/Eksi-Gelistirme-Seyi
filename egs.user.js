@@ -1283,7 +1283,7 @@ function EksiGS(){
 
     function inlineEntry(selector){
         //include style
-        GM_addStyle('.entrygom-div { display:block; border:solid 1px #888888; box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.5); margin-bottom: 7px; padding-left: 7px; padding-top: 7px; padding-bottom: 10px; padding-right: 7px; }' +
+        GM_addStyle('.entrygom-div { display:block; border:solid 1px #888888; box-shadow: 5px 5px 5px #888888; margin-bottom: 7px; padding-left: 7px; padding-top: 7px; padding-bottom: 10px; padding-right: 7px; }' +
                     '.entrygom-div #title { padding-left: 0px; padding-right: 0px; text-indent: 0; }' +
                     '.entrygom-div #entry-list { text-indent: 0; padding-left: 0px; padding-right: 0px; margin-top: 10px; margin-bottom: 0px; }' +
                     '.entrygom-div #entry-list footer .rate-options { display: inline-block !important; }' +
@@ -1391,7 +1391,7 @@ function EksiGS(){
     }
 
     function quickMessageHistory(){
-        if($('#entry-list').length === 0)
+        if($('#entry-list').length === 0 && $("#user-profile-title").length === 0)
             return;
 
         GM_addStyle('#mesaj-tarihcesi li { list-style-type: none; }' +
@@ -1404,10 +1404,16 @@ function EksiGS(){
                     '#mesaj-tarihcesi li article:hover { background-color: #d8d8d8; }');
 
         $(document).ready(function(){
-            $('#entry-list .info a[title="mesaj at"]').click(function(){
+            $('#entry-list .info a[title="mesaj at"], #btnmsg').click(function(){
                 $('#mesaj-tarihcesi').remove();
                 $('#message-send-form').append('<div id="mesaj-tarihcesi"><img style="margin-top: 10px;" src="' + constants.loadingGif + '"></img></div>');
-                var nick = $(this).parents(".info").find('.entry-author').attr("href").replace("/biri/", '');
+
+                if($("#user-profile-title").length !== 0){
+                    nick = $("#user-profile-title").data("nick");
+                }
+                else{
+                    nick = $(this).parents(".info").find('.entry-author').attr("href").replace("/biri/", '');
+                }
 
                 $.get('/mesaj/ara?keywords=' + nick, function(data){
                     if($(data).find('#threads').length == 0){
