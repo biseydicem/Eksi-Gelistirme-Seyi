@@ -636,9 +636,11 @@ function EksiGS(){
                 var timestampStart = new Date($('#pop-date').val());
                 var timestampEnd = new Date($('#pop-date').val());
                 var link = "/" + ek$i.topic.slugPair() + '?a=nice&p=';
-                var pageLimit = parseInt($('.pager').attr('data-pagecount'));
-                    pageLimit = isNaN(pageLimit) ? 1 : pageLimit;
-                    pageLimit = pageLimit > 400 ? Math.ceil(Math.sqrt(pageLimit)) : 20;
+                var pageCount = parseInt($('.pager').attr('data-pagecount'));
+                    pageCount = isNaN(pageCount) ? 1 : pageCount;
+                var pageLimit = pageCount > 400 ? Math.ceil(Math.sqrt(pageCount)) : 20;
+                    pageLimit = pageCount < 20 ? pageCount : pageLimit;
+
                 var pageArray = [];
                     for(var i=0; i<pageLimit; i++) pageArray[i] = i+1;
                 var result = [];
