@@ -1014,7 +1014,7 @@ function EksiGS(){
             if($('#topic').length == 0)
                 return;
 
-            if(window.location.pathname == "/")
+            if(window.location.pathname == "/" && window.location.search == "")
                 return;
 
             $('#aside').append('<section class="custom-aside-item" id="benzer-basliklar"><h2>benzer</h2><ul id="benzer-div"></ul></section>');
