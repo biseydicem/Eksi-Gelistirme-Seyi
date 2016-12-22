@@ -48,6 +48,10 @@ String.prototype.toNum = function(){
     return parseInt(this, 10);
 };
 
+String.prototype.contains = function(t) {
+	return this.indexOf(t) != -1;
+};
+
 function EksiGS(){
     var constants = {
         loadingGif : "https://i.hizliresim.com/1VMn91.gif",
@@ -266,7 +270,7 @@ function EksiGS(){
                     }
                 }
                 else {
-                    if ($(this).text().indexOf('---') != -1 && open){
+                    if ($(this).text().contains('---') && open){
                         $(this).remove();
                     }
                     else{
@@ -849,7 +853,7 @@ function EksiGS(){
 
                             //append entry elements
                             $(data).find('#content-body .topic-list li').each(function(){
-                                if(oldList.indexOf($(this)[0].innerHTML) == -1){
+                                if(oldList.contains($(this)[0].innerHTML)){
                                     entrys.push($(this));
                                 }
                                 else{
