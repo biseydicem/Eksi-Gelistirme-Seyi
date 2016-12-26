@@ -853,7 +853,7 @@ function EksiGS(){
 
                             //append entry elements
                             $(data).find('#content-body .topic-list li').each(function(){
-                                if(oldList.indexOf($(this)[0].innerHTML) != -1){
+                                if(oldList.indexOf($(this)[0].innerHTML) == -1){
                                     entrys.push($(this));
                                 }
                                 else{
