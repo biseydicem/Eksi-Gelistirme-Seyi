@@ -1053,7 +1053,8 @@ function EksiGS(){
                 $('#entry-div').empty();
             }
 
-            GM_addStyle(".light_white #side-entry-list .entrylist-item.yesBuddy { background-color: #DDDDDD; }" +
+            GM_addStyle("#side-entry-list.fixed { position: fixed; top: " + $('header').height() + "px; }" +
+                        ".light_white #side-entry-list .entrylist-item.yesBuddy { background-color: #DDDDDD; }" +
                         ".light_gray #side-entry-list .entrylist-item.yesBuddy { background-color: #CCCCCC; }" +
                         ".light_sepia #side-entry-list .entrylist-item.yesBuddy { background-color: #D5D1C8; }" +
                         ".dark-theme #side-entry-list .entrylist-item.yesBuddy { background-color: #1f1f1f; }" +
@@ -1061,13 +1062,14 @@ function EksiGS(){
 
             var buddyList = JSON.parse(localStorage.getItem("buddy_list"));
 
-            var ins = "";
+            var entryListHtml = "";
             $('#topic #entry-list>li').each(function(){
                 var isBuddy = ($.inArray($(this).data('author'), buddyList) != -1) ? "yesBuddy" : "";
-                ins += '<li><a data-id="' + $(this).data('id') + '" class="entrylist-item ' + isBuddy + '" onclick="return false;">#' + $(this).data('id') + '/@' + $(this).data('author') + '</a></li>';
+                entryListHtml += '<li><a data-id="' + $(this).data('id') + '" class="entrylist-item ' + isBuddy + '" onclick="return false;">#' + $(this).data('id') + '/@' + $(this).data('author') + '</a></li>';
             });
 
-            $('#entry-div').append(ins);
+            $('#entry-div').append(entryListHtml);
+
             $('.entrylist-item').click(function(){
                 if(window.location.pathname == "/"){
                     topPos = $('li[data-id="' + $(this).data('id') + '"]').offset().top - $('header').height() - $("#title").height()*(2.5);
@@ -1076,6 +1078,19 @@ function EksiGS(){
                     topPos = $('li[data-id="' + $(this).data('id') + '"]').offset().top - $('header').height() - 3;
                 }
                 $("html, body").animate({ scrollTop: topPos }, 500);
+            });
+
+            var listTopPos = $('#side-entry-list').offset().top + $('header').height() + 100;
+            $(window).scroll(function(){
+                var currentScroll = $(window).scrollTop();
+
+                if (currentScroll >= listTopPos) {
+                    $('#side-entry-list').addClass("fixed");
+                }
+                else {
+                    $('#side-entry-list').removeClass("fixed");
+                }
+
             });
         }
 
