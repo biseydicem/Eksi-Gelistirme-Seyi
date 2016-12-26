@@ -219,6 +219,7 @@ function EksiGS(){
         GM_addStyle("#searchLinks { border-bottom:1px solid #a6a6a7; padding-top: 3px; padding-bottom: 3px; }" +
                     "#searchLinks a { display: inline-block; text-align: center; width: 20%; vertical-align: top; text-decoration: none; height: 90px; padding: 5px;  }" +
                     "#searchLinks a:hover {background-color: #e0e0e0; }" +
+                    ".dark-theme #searchLinks a:hover { background-color: #353535; }" +
                     "#searchLinks img { width: 30px; }" +
                     "#searchLinks span { display:block; }");
 
@@ -391,7 +392,7 @@ function EksiGS(){
 
             var date = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
             var date2 = dateParts[2] + '-' + dateParts[1] + '-' + (parseInt(dateParts[0])+1);
-            $(this).after('<a href="' + url + '?searchform.when.from=' + date + '&searchform.when.to=' + date2 + '&a=search" style="font-size: 75%; margin-right: 1px; color: initial;" title="tarihe git"><></a>');
+            $(this).after('<a href="' + url + '?searchform.when.from=' + date + '&searchform.when.to=' + date2 + '&a=search" style="font-size: 75%; margin-right: 1px; color: inherit;" title="tarihe git"><></a>');
         });
     }
 
@@ -575,7 +576,8 @@ function EksiGS(){
 
                     ".light_white .custom-aside-item li>a:hover { background-color: #DDDDDD; }" +
                     ".light_gray .custom-aside-item li>a:hover { background-color: #CCCCCC; }" +
-                    ".light_sepia .custom-aside-item li>a:hover { background-color: #D5D1C8; }");
+                    ".light_sepia .custom-aside-item li>a:hover { background-color: #D5D1C8; }" +
+                    ".dark-theme .custom-aside-item li>a:hover { background-color: #1f1f1f; }");
 
         entrysByDate();
         operations(); //maybe have a better name
