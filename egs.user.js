@@ -627,15 +627,19 @@ function EksiGS(){
                                    '</div>' +
                                 '</section>');
 
-            //set default values (one year interval)
-            $("#pop-date").val((currentTime.getFullYear()-1) + "-" + (currentTime.getMonth()+1) + "-" + (currentTime.getUTCDate() < 10 ? "0" : "") + currentTime.getUTCDate());
-            $("#pop-date2").val(currentTime.getFullYear() + "-" + (currentTime.getMonth()+1) + "-" + (currentTime.getUTCDate() < 10 ? "0" : "") + currentTime.getUTCDate());
+            //set default values (one week interval)
+            $("#pop-date").val(getFormattedTime(currentTimestamp - 1000*60*60*24*7));
+            $("#pop-date2").val(getFormattedTime(currentTimestamp));
 
             //preset values click event
             $("#pop-div .preset a").click(function(){
-                var presetTime = new Date($(this).data("timestamp"));
-                $("#pop-date").val(presetTime.getFullYear() + "-" + (presetTime.getMonth()+1) + "-" + (presetTime.getUTCDate() < 10 ? "0" : "") + presetTime.getUTCDate());
+                $("#pop-date").val(getFormattedTime($(this).data("timestamp")));
             });
+
+            function getFormattedTime(timestampToFormat){
+                var d = new Date(timestampToFormat);
+                return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getUTCDate() < 10 ? "0" : "") + d.getUTCDate();
+            }
 
             //button click event
             $('#pop-button').click(function(){
