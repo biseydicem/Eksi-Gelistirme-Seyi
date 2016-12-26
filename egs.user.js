@@ -566,7 +566,7 @@ function EksiGS(){
 
     function extendAside(){
         GM_addStyle(".custom-aside-item { margin-top: 25px; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; padding-right: 8px; }" +
-                    ".custom-aside-item li>a { display: block; padding: 4px 0; }" +
+                    ".custom-aside-item li>a { display: inline-block; padding: 4px 0; width: 100%; }" +
                     ".custom-aside-item li>a:hover { text-decoration: none; }" +
 
                     ".light_white .custom-aside-item { background-color: #f7f7f7; }" +
@@ -826,6 +826,7 @@ function EksiGS(){
                 var pageLimit = 0; //information for user, not effective
                 var oldList = []; //list from local storage
                 var limit = 0; //do we reached the last checked entry
+                var showAllGlobal = false;
 
                 //get old list
                 if(localStorage.getItem(obj.name + "entry_list")){
@@ -833,17 +834,23 @@ function EksiGS(){
                 }
 
                 //add the label
-                $('#operations-container .operations').append('<li><a class="primary" id="' + obj.name + '-button">' + obj.name + ' yükle</a><small id="' + obj.name + '-status"></small></li>');
+                $('#operations-container .operations').append('<li>' +
+                                                                  '<a style="width: 90%;" class="primary" id="' + obj.name + '-button" title="yenileri getir">' + obj.name + ' yükle</a>' +
+                                                                  '<a id="' + obj.name + '-all-button" style="float: right; width: 10%; text-align: center;" title="hepsini getir">[+]</a>' +
+                                                                  '<small id="' + obj.name + '-status"></small>' +
+                                                              '</li>');
 
                 //click event for label
                 $('#' + obj.name + '-button').click(function(){
-                    loadList();
+                    loadList(false, 1);
                 });
 
-                function loadList(pageNumber){
-                    if (typeof pageNumber === 'undefined') {
-                        pageNumber = 1;
-                    }
+                $('#' + obj.name + '-all-button').click(function(){
+                    loadList(true, 1);
+                });
+
+                function loadList(showAll, pageNumber){
+                    showAllGlobal = showAll;
 
                     $.ajax({
                         url: obj.url + pageNumber,
@@ -855,27 +862,32 @@ function EksiGS(){
 
                             //append entry elements
                             $(data).find('#content-body .topic-list li').each(function(){
-                                if(oldList.indexOf($(this)[0].innerHTML) == -1){
+                                if(showAll == true){
                                     entrys.push($(this));
                                 }
                                 else{
-                                    limit = 1;
-                                    updateStatus(obj.name, pageNumber, pageNumber);
-                                    return false;
+                                    if(oldList.indexOf($(this)[0].innerHTML) == -1){
+                                        entrys.push($(this));
+                                    }
+                                    else{
+                                        limit = 1;
+                                        updateStatus(obj.name, pageNumber, pageNumber);
+                                        return false;
+                                    }
                                 }
                             });
 
                             if(limit == 0){
                                 //check if it is done
                                 if($(data).find(".full-index-continue-link-container").length != 0){ //if it is the first page
-                                    loadList(2);
+                                    loadList(showAll, 2);
                                 }
                                 else{
                                     //check if it is the last page
                                     var pager = $(data).find("#content .pager");
                                     if(pager.data("currentpage") != pager.data("pagecount")){
                                         pageLimit = pager.data("pagecount");
-                                        loadList(pageNumber+1);
+                                        loadList(showAll, pageNumber+1);
                                     }
                                     else{
                                         //it is last page so show entrys
@@ -891,17 +903,19 @@ function EksiGS(){
                 }
 
                 function showEntryList(){
-                    //save the list to local storage
-                    var i, list = [];
-                    for(i=0; i<entrys.length; i++){
-                        list.push(entrys[i][0].innerHTML);
-                    }
-                    if(list.length == 0){
-                        ek$i.addResponse("hiç yeni " + obj.name + " yokmuş", "info")
-                        return;
-                    }
-                    else if(list != oldList){
-                        localStorage.setItem(obj.name + "entry_list", JSON.stringify(list));
+                    if(showAllGlobal == false){
+                        //save the list to local storage
+                        var i, list = [];
+                        for(i=0; i<entrys.length; i++){
+                            list.push(entrys[i][0].innerHTML);
+                        }
+                        if(list.length == 0){
+                            ek$i.addResponse("hiç yeni " + obj.name + " yokmuş", "info")
+                            return;
+                        }
+                        else if(list != oldList){
+                            localStorage.setItem(obj.name + "entry_list", JSON.stringify(list));
+                        }
                     }
 
                     //insert style
