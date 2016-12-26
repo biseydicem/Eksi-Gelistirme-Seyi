@@ -553,8 +553,7 @@ window.ek$i = window.ek$i || {},
             })
         };
         n.fn.stickTo = function(i, r) {
-            return this.length !== 1 && t.log("$.stickTo(): called for " + this.length + " elements"), this.position(n.extend({}, o, r, {
-                of: i
+            return this.length !== 1 && t.log("$.stickTo(): called for " + this.length + " elements"), this.position(n.extend({}, o, r, { of: i
             }))
         }
     }(jQuery, window.console),
