@@ -1083,7 +1083,13 @@ function EksiGS(){
             var entryListHtml = "";
             $('#topic #entry-list>li').each(function(){
                 var isBuddy = ($.inArray($(this).data('author'), buddyList) != -1) ? "yesBuddy" : "";
-                entryListHtml += '<li><a data-id="' + $(this).data('id') + '" class="entrylist-item ' + isBuddy + '" onclick="return false;">#' + $(this).data('id') + '/@' + $(this).data('author') + '</a></li>';
+                if(window.location.pathname == "/"){
+                    var text = $(this).parent().prev().prev().data('title') + '/@' + $(this).data('author');
+                }
+                else{
+                    var text = '#' + $(this).data('id') + '/@' + $(this).data('author');
+                }
+                entryListHtml += '<li><a data-id="' + $(this).data('id') + '" class="entrylist-item ' + isBuddy + '" onclick="return false;">' + text + '</a></li>';
             });
 
             $('#entry-div').append(entryListHtml);
