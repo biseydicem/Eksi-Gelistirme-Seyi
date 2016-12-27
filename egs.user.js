@@ -1221,13 +1221,14 @@ function EksiGS(){
                         },
                         success: function(data) {
                             //look for actual link
-                            var matches = $(data).find(".content a[href*='" + regexList[index] + "']");
+                            var matches = $(data).find(".content:eq(0) a[href*='" + regexList[index] + "']");
+                            var text = $(data).find(".content")[0].innerHTML.replace(/<br>/g, "&#010;").replace(/<\/?[^>]+(>|$)/g, "");
 
                             //check if any link exists
                             if(matches.length !== 0) {
                                 //append the link
                                 var url = matches.first().attr('href');
-                                $('#kimdirnedir-container').append('<a style="margin-right: 5px;" href="' + url + '" target="_blank"><img src="' + imageList[index] + '" style="width: 50px;"></a>');
+                                $('#kimdirnedir-container').append('<a title=\'' + text + '\' style="margin-right: 5px;" href="' + url + '" target="_blank"><img src="' + imageList[index] + '" style="width: 50px;"></a>');
                             }
                         },
                         error: function(XMLHttpRequest, textStatus, errorThrown){
