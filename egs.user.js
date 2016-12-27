@@ -1221,8 +1221,8 @@ function EksiGS(){
                         },
                         success: function(data) {
                             //look for actual link
-                            var matches = $(data).find(".content:eq(0) a[href*='" + regexList[index] + "']");
-                            var text = $(data).find(".content")[0].innerHTML.replace(/<br>/g, "&#010;").replace(/<\/?[^>]+(>|$)/g, "");
+                            var matches = $(data).find(".content a[href*='" + regexList[index] + "']");
+                            var text = matches.parents(".content")[0].innerHTML.replace(/<br>/g, "&#010;").replace(/<\/?[^>]+(>|$)/g, "");
 
                             //check if any link exists
                             if(matches.length !== 0) {
