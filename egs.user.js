@@ -1071,12 +1071,16 @@ function EksiGS(){
                 $('#entry-div').empty();
             }
 
-            GM_addStyle("#side-entry-list.fixed { position: fixed; top: " + $('header').height() + "px; }" +
+            GM_addStyle("#side-entry-list.fixed { position: fixed; top: " + $('header').height() + "px; max-height: 84vh; overflow-y: auto; overflow-x: hidden; }" +
+                        "#side-entry-list.fixed::-webkit-scrollbar { width: 8px; }" +
+                        "#side-entry-list.fixed::-webkit-scrollbar-button { width: 0; height: 0; display: none; }" +
+                        "#side-entry-list.fixed::-webkit-scrollbar-corner { background-color: transparent; }" +
+                        "#side-entry-list.fixed::-webkit-scrollbar-thumb { background-color: #202020; -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.07); -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; }" +
+                        "#side-entry-list li { overflow: hidden; }" +
                         ".light_white #side-entry-list .entrylist-item.yesBuddy { background-color: #DDDDDD; }" +
                         ".light_gray #side-entry-list .entrylist-item.yesBuddy { background-color: #CCCCCC; }" +
                         ".light_sepia #side-entry-list .entrylist-item.yesBuddy { background-color: #D5D1C8; }" +
-                        ".dark-theme #side-entry-list .entrylist-item.yesBuddy { background-color: #1f1f1f; }" +
-                        "#side-entry-list li { overflow: hidden; }");
+                        ".dark-theme #side-entry-list .entrylist-item.yesBuddy { background-color: #1f1f1f; }");
 
             var buddyList = JSON.parse(localStorage.getItem("buddy_list"));
 
@@ -1114,7 +1118,6 @@ function EksiGS(){
                 else {
                     $('#side-entry-list').removeClass("fixed");
                 }
-
             });
         }
 
