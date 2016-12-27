@@ -566,7 +566,7 @@ function EksiGS(){
 
     function extendAside(){
         GM_addStyle(".custom-aside-item { margin-top: 25px; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; padding-right: 8px; }" +
-                    ".custom-aside-item li>a { display: inline-block; padding: 4px 0; width: 100%; }" +
+                    ".custom-aside-item li>a { display: block; padding: 4px 0; }" +
                     ".custom-aside-item li>a:hover { text-decoration: none; }" +
 
                     ".light_white .custom-aside-item { background-color: #f7f7f7; }" +
@@ -627,19 +627,15 @@ function EksiGS(){
                                    '</div>' +
                                 '</section>');
 
-            //set default values (one week interval)
-            $("#pop-date").val(getFormattedTime(currentTimestamp - 1000*60*60*24*7));
-            $("#pop-date2").val(getFormattedTime(currentTimestamp));
+            //set default values (one year interval)
+            $("#pop-date").val((currentTime.getFullYear()-1) + "-" + (currentTime.getMonth()+1) + "-" + (currentTime.getUTCDate() < 10 ? "0" : "") + currentTime.getUTCDate());
+            $("#pop-date2").val(currentTime.getFullYear() + "-" + (currentTime.getMonth()+1) + "-" + (currentTime.getUTCDate() < 10 ? "0" : "") + currentTime.getUTCDate());
 
             //preset values click event
             $("#pop-div .preset a").click(function(){
-                $("#pop-date").val(getFormattedTime($(this).data("timestamp")));
+                var presetTime = new Date($(this).data("timestamp"));
+                $("#pop-date").val(presetTime.getFullYear() + "-" + (presetTime.getMonth()+1) + "-" + (presetTime.getUTCDate() < 10 ? "0" : "") + presetTime.getUTCDate());
             });
-
-            function getFormattedTime(timestampToFormat){
-                var d = new Date(timestampToFormat);
-                return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getUTCDate() < 10 ? "0" : "") + d.getUTCDate();
-            }
 
             //button click event
             $('#pop-button').click(function(){
@@ -830,7 +826,6 @@ function EksiGS(){
                 var pageLimit = 0; //information for user, not effective
                 var oldList = []; //list from local storage
                 var limit = 0; //do we reached the last checked entry
-                var showAllGlobal = false;
 
                 //get old list
                 if(localStorage.getItem(obj.name + "entry_list")){
@@ -838,23 +833,17 @@ function EksiGS(){
                 }
 
                 //add the label
-                $('#operations-container .operations').append('<li>' +
-                                                                  '<a style="width: 90%;" class="primary" id="' + obj.name + '-button" title="yenileri getir">' + obj.name + ' yükle</a>' +
-                                                                  '<a id="' + obj.name + '-all-button" style="float: right; width: 10%; text-align: center;" title="hepsini getir">[+]</a>' +
-                                                                  '<small id="' + obj.name + '-status"></small>' +
-                                                              '</li>');
+                $('#operations-container .operations').append('<li><a class="primary" id="' + obj.name + '-button">' + obj.name + ' yükle</a><small id="' + obj.name + '-status"></small></li>');
 
                 //click event for label
                 $('#' + obj.name + '-button').click(function(){
-                    loadList(false, 1);
+                    loadList();
                 });
 
-                $('#' + obj.name + '-all-button').click(function(){
-                    loadList(true, 1);
-                });
-
-                function loadList(showAll, pageNumber){
-                    showAllGlobal = showAll;
+                function loadList(pageNumber){
+                    if (typeof pageNumber === 'undefined') {
+                        pageNumber = 1;
+                    }
 
                     $.ajax({
                         url: obj.url + pageNumber,
@@ -866,32 +855,27 @@ function EksiGS(){
 
                             //append entry elements
                             $(data).find('#content-body .topic-list li').each(function(){
-                                if(showAll == true){
+                                if(oldList.indexOf($(this)[0].innerHTML) == -1){
                                     entrys.push($(this));
                                 }
                                 else{
-                                    if(oldList.indexOf($(this)[0].innerHTML) == -1){
-                                        entrys.push($(this));
-                                    }
-                                    else{
-                                        limit = 1;
-                                        updateStatus(obj.name, pageNumber, pageNumber);
-                                        return false;
-                                    }
+                                    limit = 1;
+                                    updateStatus(obj.name, pageNumber, pageNumber);
+                                    return false;
                                 }
                             });
 
                             if(limit == 0){
                                 //check if it is done
                                 if($(data).find(".full-index-continue-link-container").length != 0){ //if it is the first page
-                                    loadList(showAll, 2);
+                                    loadList(2);
                                 }
                                 else{
                                     //check if it is the last page
                                     var pager = $(data).find("#content .pager");
                                     if(pager.data("currentpage") != pager.data("pagecount")){
                                         pageLimit = pager.data("pagecount");
-                                        loadList(showAll, pageNumber+1);
+                                        loadList(pageNumber+1);
                                     }
                                     else{
                                         //it is last page so show entrys
@@ -907,19 +891,17 @@ function EksiGS(){
                 }
 
                 function showEntryList(){
-                    if(showAllGlobal == false){
-                        //save the list to local storage
-                        var i, list = [];
-                        for(i=0; i<entrys.length; i++){
-                            list.push(entrys[i][0].innerHTML);
-                        }
-                        if(list.length == 0){
-                            ek$i.addResponse("hiç yeni " + obj.name + " yokmuş", "info")
-                            return;
-                        }
-                        else if(list != oldList){
-                            localStorage.setItem(obj.name + "entry_list", JSON.stringify(list));
-                        }
+                    //save the list to local storage
+                    var i, list = [];
+                    for(i=0; i<entrys.length; i++){
+                        list.push(entrys[i][0].innerHTML);
+                    }
+                    if(list.length == 0){
+                        ek$i.addResponse("hiç yeni " + obj.name + " yokmuş", "info")
+                        return;
+                    }
+                    else if(list != oldList){
+                        localStorage.setItem(obj.name + "entry_list", JSON.stringify(list));
                     }
 
                     //insert style
@@ -1083,7 +1065,13 @@ function EksiGS(){
             var entryListHtml = "";
             $('#topic #entry-list>li').each(function(){
                 var isBuddy = ($.inArray($(this).data('author'), buddyList) != -1) ? "yesBuddy" : "";
-                entryListHtml += '<li><a data-id="' + $(this).data('id') + '" class="entrylist-item ' + isBuddy + '" onclick="return false;">#' + $(this).data('id') + '/@' + $(this).data('author') + '</a></li>';
+                if(window.location.pathname == "/"){
+                    var text = $(this).parent().prev().prev().data('title') + '/@' + $(this).data('author');
+                }
+                else{
+                    var text = '#' + $(this).data('id') + '/@' + $(this).data('author');
+                }
+                entryListHtml += '<li><a data-id="' + $(this).data('id') + '" class="entrylist-item ' + isBuddy + '" onclick="return false;">' + text + '</a></li>';
             });
 
             $('#entry-div').append(entryListHtml);
