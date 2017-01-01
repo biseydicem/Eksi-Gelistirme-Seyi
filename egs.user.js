@@ -1225,10 +1225,11 @@ function EksiGS(){
                         success: function(data) {
                             //look for actual link
                             var matches = $(data).find(".content a[href*='" + regexList[index] + "']");
-                            var text = matches.parents(".content")[0].innerHTML.replace(/<br>/g, "&#010;").replace(/<\/?[^>]+(>|$)/g, "");
 
                             //check if any link exists
                             if(matches.length !== 0) {
+                                var text = matches.parents(".content")[0].innerHTML.replace(/<br>/g, "&#010;").replace(/<\/?[^>]+(>|$)/g, "");
+
                                 //append the link
                                 var url = matches.first().attr('href');
                                 $('#kimdirnedir-container').append('<a title=\'' + text + '\' style="margin-right: 5px;" href="' + url + '" target="_blank"><img src="' + imageList[index] + '" style="width: 50px;"></a>');
