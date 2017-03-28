@@ -93,6 +93,7 @@ function EksiGS(){
         getRandomEntry();
         openProfileCards();
         autoSaveNotes();
+        minimizeProfilePage();
     }
 
     this.otherPages = function(){
@@ -707,7 +708,7 @@ function EksiGS(){
                                '</section>');
 
             showImages();
-            loadDebe();
+            //loadDebe();
             loadBuddyEntries();
             loadFavsOfBuddys();
 
@@ -1531,5 +1532,87 @@ function EksiGS(){
                 }
                 return false;
             });
+    }
+
+    function minimizeProfilePage(){
+        var style = ".topic-item.narrow .content { display: none; }"
+                  + ".topic-item.narrow .feedback { display: none !important; }"
+                  + ".topic-item.narrow #title { display: inline-block !important; }"
+                  + ".topic-item.narrow #entry-list { display: inline-block !important; margin-bottom: 0 !important; margin-left: 10px !important; }"
+                  + ".topic-item.narrow .info { text-align: initial !important; float: initial !important; }"
+                  + ".topic-item.narrow .entry-author { display: none !important; }"
+                  + ".topic-item.narrow .other { display: none !important; }";
+
+        GM_addStyle(style);
+
+        waitForKeyElements("#topic .topic-item", highlightGoodComments);
+
+        $("#profile-stats-sections .tab-trigger").click(function(){
+            waitForKeyElements("#topic .topic-item", highlightGoodComments);
+        });
+
+        function highlightGoodComments(jNode) {
+            jNode.addClass("narrow");
+            jNode.find(".entry-date").click(function(e){
+                e.preventDefault();
+                if(jNode.hasClass("narrow")){
+                    jNode.removeClass("narrow");
+                }
+                else{
+                    jNode.addClass("narrow");
+                }
+            });
+        }
+
+        function waitForKeyElements(selectorTxt, actionFunction) {
+            var targetNodes, btargetsFound;
+                targetNodes = $(selectorTxt);
+
+            if (targetNodes && targetNodes.length > 0) {
+                btargetsFound = true;
+                /*--- Found target node(s).  Go through each and act if they
+                    are new.  */
+                targetNodes.each(function() {
+                    var jThis = $(this);
+                    var alreadyFound = jThis.data('alreadyFound') || false;
+
+                    if (!alreadyFound) {
+                        //--- Call the payload function.
+                        var cancelFound = actionFunction(jThis);
+                        if (cancelFound)
+                            btargetsFound = false;
+                        else
+                            jThis.data('alreadyFound', true);
+                    }
+                });
+            } else {
+                btargetsFound = false;
+            }
+
+            //--- Get the timer-control variable for this selector.
+            var controlObj = waitForKeyElements.controlObj || {};
+            var controlKey = selectorTxt.replace(/[^\w]/g, "_");
+            var timeControl = controlObj[controlKey];
+
+            //--- Now set or clear the timer as appropriate.
+            if (btargetsFound && timeControl) {
+                //--- The only condition where we need to clear the timer.
+                clearInterval(timeControl);
+                delete controlObj[controlKey]
+            } else {
+                //--- Set a timer, if needed.
+                if (!timeControl) {
+                    timeControl = setInterval(function() {
+                            waitForKeyElements(selectorTxt,
+                                actionFunction
+                            );
+                        },
+                        300
+                    );
+                    controlObj[controlKey] = timeControl;
+                }
+            }
+            waitForKeyElements.controlObj = controlObj;
+        }
     }
 }
