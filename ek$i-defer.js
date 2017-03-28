@@ -1,13 +1,13 @@
 (function(n, t, i) {
     function h(n) {
-        b && console.log(n)
+        k && console.log(n)
     }
 
-    function k(t) {
+    function d(t) {
         n.getCachedScript(t)
     }
 
-    function d() {
+    function g() {
         n("#return-to-innocence").click(function() {
             n.cookie("notheme", 1);
             i.reload()
@@ -16,7 +16,7 @@
 
     function u(i) {
         if (i.IsFallbackAd) return !1;
-        if (o >= w) return h("AdSense display limit exceeded"), !1;
+        if (o >= b) return h("AdSense display limit exceeded"), !1;
         var r = n(t).width();
         return typeof i.Size == "undefined" || r >= i.Size[0] ? !0 : (h(i.Name + " won't be displayed due to screen width. " + JSON.stringify({
             screenWidth: r,
@@ -26,7 +26,7 @@
     }
 
     function c() {
-        s || (s = !0, k("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"))
+        s || (s = !0, d("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"))
     }
 
     function l(i, r) {
@@ -57,14 +57,24 @@
         });
         r.append(u).show();
         googletag.cmd.push(function() {
+            if (i.Name === "MobileWebInterstitial" || i.Name === "DoubleClickWeb300x250SideZiyaretci") {
+                if (!t.netadcfg) {
+                    t.setTimeout(function() {
+                        v();
+                        googletag.display(i.Slot)
+                    }, 350);
+                    return
+                }
+                v()
+            }
             googletag.display(i.Slot)
         });
         i.Name === "DoubleClickMobileInterstital" && t.setTimeout(function() {
-            g(r)
+            nt(r)
         }, 3e3)
     }
 
-    function g(n) {
+    function nt(n) {
         function r(n) {
             var t = document.getElementById(n),
                 i;
@@ -80,9 +90,9 @@
         }, 15e3))
     }
 
-    function nt() {
-        var t = n(y);
-        tt(t);
+    function tt() {
+        var t = n(p);
+        it(t);
         t.each(function(t, i) {
             var r = n(i),
                 e = r.data("info");
@@ -94,7 +104,7 @@
         })
     }
 
-    function tt(t) {
+    function it(t) {
         function u(t) {
             if (typeof t != "undefined") {
                 var i = t.slot.getName();
@@ -226,7 +236,7 @@
             googletag.pubads().setTargeting("seylerembedstyle", w);
             googletag.pubads().setTargeting("isAdultContent", s);
             googletag.pubads().setTargeting("titlekeywords", i);
-            et();
+            ot();
             googletag.enableServices()
         })
     }
@@ -239,8 +249,8 @@
         return (n = n.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i), !n || n.length !== 4) ? "" : e(n[1]) + e(n[2]) + e(n[3])
     }
 
-    function it() {
-        var t = n(v);
+    function rt() {
+        var t = n(y);
         t.each(function(t, i) {
             var r = n(i),
                 f = r.data("info");
@@ -254,7 +264,7 @@
     }
 
     function a() {
-        var r = n(p),
+        var r = n(w),
             i;
         if (r.length > 0) {
             if (c(), i = t.adsbygoogle, !i) {
@@ -270,7 +280,7 @@
         }
     }
 
-    function rt() {
+    function ut() {
         var i = n(".ad-doubleclickweb300x250sidesticky"),
             t = i.data("info"),
             r = t.Size[0],
@@ -288,29 +298,33 @@
         }
     }
 
-    function ut() {
+    function ft() {
         var f = n(t).scrollTop(),
             r = n("#sticky-anchor"),
             i = n("#sticky-ad"),
             u = n(".ad-doubleclickweb728x90bottomziyaretci"),
             e = r.offset().top - 120;
-        u.length < 1 || (f > e ? (i.addClass("stick-ad"), r.height(i.outerHeight()), u.offset().top - i.offset().top - 300 >= 325 && rt()) : (i.removeClass("stick-ad"), r.height(0)))
-    }
-
-    function ft() {
-        n(t).scroll(ut)
+        u.length < 1 || (f > e ? (i.addClass("stick-ad"), r.height(i.outerHeight()), u.offset().top - i.offset().top - 300 >= 325 && ut()) : (i.removeClass("stick-ad"), r.height(0)))
     }
 
     function et() {
+        n(t).scroll(ft)
+    }
+
+    function ot() {
         for (var i = (t.crtg_content || "").split(";"), r = googletag.pubads(), n = 1; n < i.length; n++) r.setTargeting("" + i[n - 1].split("=")[0] + "", "" + i[n - 1].split("=")[1] + "")
     }
-    var v = ".ad-adsense",
-        y = ".ad-double-click",
-        p = ".ad-adsensepageleveladindexpages",
-        w = 4,
+
+    function v() {
+        for (var n in t.netadcfg) t.netadcfg[n] === "314" && googletag.pubads().setTargeting("netkeys_314", [n.substr(1)]), t.netadcfg[n] === "313" && googletag.pubads().setTargeting("netkeys_313", [n.substr(1)]), t.netadcfg[n] === "317" && googletag.pubads().setTargeting("netkeys_317", [n.substr(1)]), t.netadcfg[n] === "318" && googletag.pubads().setTargeting("netkeys_318", [n.substr(1)]), t.netadcfg[n] === "319" && googletag.pubads().setTargeting("netkeys_319", [n.substr(1)]), t.netadcfg[n] === "320" && googletag.pubads().setTargeting("netkeys_320", [n.substr(1)]), t.netadcfg[n] === "321" && googletag.pubads().setTargeting("netkeys_321", [n.substr(1)])
+    }
+    var y = ".ad-adsense",
+        p = ".ad-double-click",
+        w = ".ad-adsensepageleveladindexpages",
+        b = 4,
         o = 0,
         s = !1,
-        b = i.search.indexOf("adlog") > -1;
+        k = i.search.indexOf("adlog") > -1;
     n.fn.loadAdsLazily = function() {
         function c(t) {
             var r = n(t),
@@ -374,11 +388,11 @@
         return l(this), this
     };
     n(document).ready(function() {
-        ft();
-        d();
+        et();
+        g();
         a();
-        it();
-        nt()
+        rt();
+        tt()
     })
 })(jQuery, window, location),
 function(n) {
@@ -561,6 +575,20 @@ function(n, t) {
         });
         n(".title-autocomplete").titleAutoComplete({
             browseOnSelection: !1
+        })
+    })
+}(jQuery),
+function(n) {
+    n(document).ready(function() {
+        n(".toast-bottom-wrapper .toast-close").on("click", function(t) {
+            t.preventDefault();
+            var r = n(this),
+                i = r.closest(".toast-bottom-wrapper"),
+                u = i.data("containerName");
+            i.hide();
+            n.cookie(u, "yes", {
+                expires: 365
+            })
         })
     })
 }(jQuery),

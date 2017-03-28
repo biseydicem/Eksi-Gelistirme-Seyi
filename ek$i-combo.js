@@ -26,6 +26,9 @@ window.ek$i = window.ek$i || {},
             }
         });
         n.extend(i, n("#eksi").data());
+        n.extend(i, {
+            facebookAppId: "303855479757229"
+        });
         i.isTouchDevice || (e = document.documentElement.getAttribute("class") || "", document.documentElement.setAttribute("class", e + " no-touch"));
         n(document).ready(function() {
             u("shouldContainLowercase", i.passwordValidationRegexps.containLowercase, "en az bir küçük harf içermeli");
@@ -819,6 +822,24 @@ window.ek$i = window.ek$i || {},
                 }, "fast")
             })
         }
+
+        function nt(t) {
+            n("#reset-index-title-block-link").on("click", function() {
+                n.get(ek$i.baseUrl + "titleindexvisibility", {
+                    topicId: t
+                }, function(t) {
+                    n("#reset-index-title-block").html(t)
+                }).done(function() {
+                    n("#reset-index-title-block-button").click(function() {
+                        n.post(ek$i.baseUrl + "setindextitleblockinfo", {
+                            topicId: t
+                        }, function() {
+                            ek$i.addResponse("başarılı", "success")
+                        })
+                    })
+                })
+            })
+        }
         var i = "tracked",
             t, r = [{
                 caption: "takip et",
@@ -866,7 +887,8 @@ window.ek$i = window.ek$i || {},
                     b();
                     k();
                     d();
-                    g()
+                    g();
+                    nt(t.id)
                 }
             }
         });
@@ -978,7 +1000,7 @@ window.ek$i = window.ek$i || {},
         }
     }(jQuery, window),
     function(n) {
-        var t = "Blocked";
+        var t = "m";
         ek$i.entryMenu.menuItems.push({
             order: 100,
             requiredFlag: "msg",
@@ -1743,9 +1765,9 @@ window.ek$i = window.ek$i || {},
         }
 
         function g(n) {
-            var t = n.closest("article").find(s);
-            t.prop("checked", !0);
-            l(t)
+            var t = n.parents(".dropdown").find(s);
+            l(t);
+            t.prop("checked", !0)
         }
 
         function nt(t) {
