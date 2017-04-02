@@ -711,10 +711,29 @@ function EksiGS(){
             //loadDebe();
             loadBuddyEntries();
             loadFavsOfBuddys();
+            sortByFavCount();
 
             //if there is no option do not show the panel
             if($("#operations-container .operations *").length == 0){
                 $("#operations-container").remove();
+            }
+
+            function sortByFavCount(){
+                if($('#entry-list').length === 0)
+                    return;
+
+                $("#operations-container .operations").append('<li><a id="sort-by-fav"><span id="sort-by-fav-label">favoriye göre sırala</span></a></li>');
+                $("#sort-by-fav").click(function(){
+                    var arr = $("#topic #entry-list>li").get();
+                    arr.sort(function(a, b) {
+                        return $(a).attr("data-favorite-count").toNum() == $(b).attr("data-favorite-count").toNum() ?
+                            0 :
+                        ($(a).attr("data-favorite-count").toNum() < $(b).attr("data-favorite-count").toNum() ? 1 : -1);
+                    });
+                    $("#topic #entry-list").html(arr);
+
+                    return false;
+                });
             }
 
             function showImages(){
@@ -726,7 +745,7 @@ function EksiGS(){
                 });
 
                 if(images.length != 0){
-                    $("#operations-container .operations").append('<a id="show-all-images"><span id="show-all-images-label">tüm resimleri göster</span> (<span id="show-all-images-count"></span>)</a>');
+                    $("#operations-container .operations").append('<li><a id="show-all-images"><span id="show-all-images-label">tüm resimleri göster</span> (<span id="show-all-images-count"></span>)</a></li>');
 
                     $("#show-all-images-count").text(images.length);
                     $("#show-all-images").click(function(){
@@ -1540,6 +1559,7 @@ function EksiGS(){
                   + ".topic-item.narrow #title { display: inline-block !important; }"
                   + ".topic-item.narrow #entry-list { display: inline-block !important; margin-bottom: 0 !important; margin-left: 10px !important; }"
                   + ".topic-item.narrow .info { text-align: initial !important; float: initial !important; }"
+                  + ".topic-item.narrow .read-more-link-wrapper { display: none !important; }"
                   + ".topic-item.narrow .entry-author { display: none !important; }"
                   + ".topic-item.narrow .other { display: none !important; }";
 
