@@ -1554,6 +1554,9 @@ function EksiGS(){
     }
 
     function minimizeProfilePage(){
+        if($('#top-navigation a:contains("ben")').attr('title') != $('#user-profile-title').attr('data-nick'))
+            return;
+
         var style = ".topic-item.narrow .content { display: none; }"
                   + ".topic-item.narrow .feedback { display: none !important; }"
                   + ".topic-item.narrow #title { display: inline-block !important; }"
